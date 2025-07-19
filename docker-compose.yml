@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n-benz # ชื่อคอนเทนเนอร์ n8n ของคุณ
+    restart: always
+    ports:
+      - "127.0.0.1:5678:5678"
+    environment:
+      - N8N_HOST=localhost       # ให้ n8n คิดว่าตัวเองรันอยู่ที่ localhost
+      - N8N_PORT=5678            # พอร์ตภายในของ n8n
+      - N8N_PROTOCOL=https       # Cloudflare Tunnel จะรับ HTTPS แล้วส่ง HTTP เข้ามา
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://localhost:5678/ # URL สาธารณะที่คุณจะเข้าถึง n8n
+      - GENERIC_TIMEZONE=Asia/Bangkok
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./local-files:/files
+
+volumes:
+  n8n_data: {} # Volume สำหรับข้อมูล n8n
